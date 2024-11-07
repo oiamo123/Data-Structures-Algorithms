@@ -16,7 +16,7 @@ public class HashSetChallenges {
         return false;
     }
 
-    // Find the single number in an array that contains duplicates ie [2, 2, 1]
+    // Find the single number in an array that doesn't contain duplicates ie [2, 2, 1]
     public int singleNumber(int[] nums) {
         Set<Integer> set = new HashSet<>();
 
