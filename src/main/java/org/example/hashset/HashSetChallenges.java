@@ -3,7 +3,7 @@ package org.example.hashset;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Challenges {
+public class HashSetChallenges {
     // Find if a duplicate exists in a given array
     public boolean containsDuplicates(int[] nums) {
         Set<Integer> set = new HashSet<>();
