@@ -1,11 +1,7 @@
 package org.example.algorithms;
 
 
-import org.example.lists.ListNode;
-import org.w3c.dom.Node;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.example.nodes.ListNode;
 
 public class FloydsAlgorithm {
     public boolean hasCycle(ListNode head) {

@@ -1,4 +1,4 @@
-package org.example.lists;
+package org.example.nodes;
 
 public class ListNode {
         public int val;
