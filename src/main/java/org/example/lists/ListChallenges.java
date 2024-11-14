@@ -3,6 +3,7 @@ package org.example.lists;
 import org.example.nodes.ListNode;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ListChallenges {
