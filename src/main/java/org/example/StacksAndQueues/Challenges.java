@@ -1,5 +1,7 @@
 package org.example.StacksAndQueues;
 
+import org.example.trees.TreeNode;
+
 import java.util.*;
 
 public class Challenges {
@@ -143,5 +145,184 @@ public class Challenges {
     private boolean isPerfectSquare(int n) {
         int sqrt = (int) Math.sqrt(n);
         return sqrt * sqrt == n;
+    }
+
+    public boolean isValid(String s) {
+        if (s == null || s.isEmpty() || s.length() == 1) return false;
+
+        char[] chars = s.toCharArray();
+        Stack<Character> stack = new Stack<>();
+
+        for (char Char : chars) {
+            if (Char == '(' || Char == '{' || Char == '[') {
+                stack.push(Char);
+            } else {
+                if (stack.isEmpty()) return false;
+
+                if (Char == ')' && stack.peek() == '(') {
+                    stack.pop();
+                } else if (Char == '}' && stack.peek() == '{') {
+                    stack.pop();
+                } else if (Char == ']' && stack.peek() == '[') {
+                    stack.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return stack.isEmpty();
+    }
+
+
+    public int[] dailyTemperatures(int[] temperatures) {
+        if (temperatures == null || temperatures.length == 0) return new int[0];
+
+        int n = temperatures.length;
+        Stack<Integer> stack = new Stack<>();
+        int[] result = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
+                int prev = stack.pop();
+                result[prev] = i - prev;
+            }
+
+            stack.push(i);
+        }
+
+        return result;
+    }
+
+
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+        for (String token : tokens) {
+            if (token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/")) {
+                int num1 = stack.pop();
+                int num2 = stack.pop();
+                switch (token) {
+                    case "+":
+                        stack.push(num2 + num1);
+                        break;
+                    case "-":
+                        stack.push(num2 - num1);
+                        break;
+                    case "*":
+                        stack.push(num2 * num1);
+                        break;
+                    case "/":
+                        stack.push(num2 / num1);
+                        break;
+                }
+            } else {
+                stack.push(Integer.parseInt(token));
+            }
+        }
+
+        return stack.pop();
+    }
+
+    class Node {
+        public int val;
+        public List<Node> neighbors;
+        public Node() {
+            val = 0;
+            neighbors = new ArrayList<Node>();
+        }
+        public Node(int _val) {
+            val = _val;
+            neighbors = new ArrayList<Node>();
+        }
+        public Node(int _val, ArrayList<Node> _neighbors) {
+            val = _val;
+            neighbors = _neighbors;
+        }
+    }
+
+    public Node cloneGraph(Node node) {
+        if (node == null) return null;
+        Map<Node, Node> map = new HashMap<>();
+        return cloneGraph2(node, map);
+    }
+
+    public Node cloneGraph2(Node node, Map<Node, Node> map) {
+        if (node == null) return null;
+        if (map.containsKey(node)) return map.get(node);
+
+        Node newNode = new Node(node.val);
+        map.put(node, newNode);
+
+        for (Node neighbor : node.neighbors) {
+            newNode.neighbors.add(cloneGraph2(neighbor, map));
+        }
+
+        return newNode;
+    }
+
+
+    public int findTargetSumWays(int[] nums, int target) {
+        return backtrack(nums, target, 0, 0);
+    }
+
+    public int backtrack(int[] nums, int target, int index, int currentSum) {
+        if (index == nums.length) {
+            return currentSum == target ? 1 : 0;
+        }
+
+        int add = backtrack(nums, target, index + 1, currentSum + nums[index]);
+        int sub = backtrack(nums, target, index + 1, currentSum - nums[index]);
+
+        return add + sub;
+    }
+
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) return list;
+        return inorderTraversal2(root, list);
+    }
+
+    public List<Integer> inorderTraversal2(TreeNode root, List<Integer> list) {
+        if (root == null) return list;
+        if (root.left != null) {
+            inorderTraversal2(root.left, list);
+        }
+
+        list.add(root.val);
+
+        if (root.right != null) {
+            inorderTraversal2(root.right, list);
+        }
+        return list;
+    }
+
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
+        }
+
+        PriorityQueue<String> queue = new PriorityQueue<>((word1, word2) -> {
+            int freq1 = map.get(word1);
+            int freq2 = map.get(word2);
+
+            if (freq1 == freq2) return word2.compareTo(word1);
+
+            return freq1 - freq2;
+        });
+
+        for (String word : map.keySet()) {
+            queue.add(word);
+            if (queue.size() > k) queue.poll();
+        }
+
+        List<String> list = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            list.add(queue.poll());
+        }
+
+        Collections.reverse(list);
+        return list;
     }
 }
